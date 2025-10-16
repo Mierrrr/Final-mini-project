@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NGO Management - Disaster Relief System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a1828 0%, #1a3a52 100%);
+            color: #ffffff;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background: rgba(10, 24, 40, 0.95);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 20px rgba(0, 188, 212, 0.3);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #00bcd4;
+        }
+
+        .nav-right {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .nav-right a {
+            color: #ffffff;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+
+        .nav-right a:hover {
+            background: rgba(0, 188, 212, 0.2);
+            color: #00bcd4;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .page-header {
+            margin-bottom: 2rem;
+        }
+
+        .page-header h1 {
+            font-size: 2.5rem;
+            color: #00bcd4;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-header p {
+            color: #b0bec5;
+        }
+
+        .action-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .search-box input {
+            padding: 0.8rem 1.5rem;
+            border: 1px solid rgba(0, 188, 212, 0.3);
+            border-radius: 25px;
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+            width: 300px;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: #00bcd4;
+        }
+
+        .btn-primary {
+            padding: 0.8rem 1.5rem;
+            background: linear-gradient(135deg, #00bcd4, #0097a7);
+            border: none;
+            border-radius: 25px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 188, 212, 0.5);
+        }
+
+        .ngo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .ngo-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 2rem;
+            border-radius: 20px;
+            border: 1px solid rgba(0, 188, 212, 0.3);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .ngo-card:hover {
+            transform: translateY(-10px);
+            border-color: #00bcd4;
+            box-shadow: 0 15px 40px rgba(0, 188, 212, 0.3);
+        }
+
+        .verified-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: linear-gradient(135deg, #4caf50, #45a049);
+            color: white;
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .pending-badge {
+            background: linear-gradient(135deg, #ff9800, #f57c00);
+        }
+
+        .ngo-header {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .ngo-logo {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #00bcd4, #0097a7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .ngo-info h3 {
+            color: #00bcd4;
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .ngo-reg {
+            color: #b0bec5;
+            font-size: 0.9rem;
+        }
+
+        .ngo-details {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .detail-item {
+            display: flex;
+            align-items: start;
+            gap: 0.8rem;
+            color: #b0bec5;
+        }
+
+        .detail-icon {
+            color: #00bcd4;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .ngo-actions {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.8rem;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(0, 188, 212, 0.2);
+        }
+
+        .btn-action {
+            padding: 0.7rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+
+        .btn-verify {
+            background: linear-gradient(135deg, #4caf50, #45a049);
+            color: white;
+        }
+
+        .btn-view {
+            background: linear-gradient(135deg, #00bcd4, #0097a7);
+            color: white;
+        }
+
+        .btn-edit {
+            background: rgba(255, 193, 7, 0.2);
+            color: #ffc107;
+            border: 1px solid #ffc107;
+        }
+
+        .btn-delete {
+            background: rgba(244, 67, 54, 0.2);
+            color: #f44336;
+            border: 1px solid #f44336;
+        }
+
+        .btn-action:hover {
+            transform: scale(1.05);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: #0a1828;
+            padding: 2.5rem;
+            border-radius: 20px;
+            border: 1px solid rgba(0, 188, 212, 0.3);
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .modal-header h3 {
+            color: #00bcd4;
+            font-size: 1.8rem;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: #00bcd4;
+            font-size: 1.8rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .close-btn:hover {
+            color: #00e5ff;
+            transform: rotate(90deg);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #00bcd4;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 1px solid rgba(0, 188, 212, 0.3);
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+            font-family: inherit;
+            font-size: 1rem;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #00bcd4;
+            box-shadow: 0 0 15px rgba(0, 188, 212, 0.3);
+        }
+
+        .stats-bar {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1.5rem;
+            border-radius: 15px;
+            border: 1px solid rgba(0, 188, 212, 0.3);
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #00bcd4;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: #b0bec5;
+        }
+
+        @media (max-width: 768px) {
+            .ngo-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .search-box input {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">🏢 NGO Management</div>
+        <div class="nav-right">
+            <a href="dashboard.html">Dashboard</a>
+            <a href="index.html">Logout</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="page-header">
+            <h1>NGO Management</h1>
+            <p>Manage and coordinate with registered NGOs</p>
+        </div>
+
+        <div class="stats-bar">
+            <div class="stat-card">
+                <div class="stat-value">58</div>
+                <div class="stat-label">Total NGOs</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">45</div>
+                <div class="stat-label">Verified</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">13</div>
+                <div class="stat-label">Pending</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">127</div>
+                <div class="stat-label">Active Projects</div>
+            </div>
+        </div>
+
+        <div class="action-bar">
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="Search NGOs...">
+            </div>
+            <button class="btn-primary" onclick="openModal('addNGOModal')">➕ Register NGO</button>
+        </div>
+
+        <div class="ngo-grid" id="ngoGrid">
+            <!-- NGOs will be loaded here -->
+        </div>
+    </div>
+
+    <!-- Add NGO Modal -->
+    <div id="addNGOModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Register New NGO</h3>
+                <button class="close-btn" onclick="closeModal('addNGOModal')">&times;</button>
+            </div>
+            <form id="addNGOForm">
+                <div class="form-group">
+                    <label for="ngoName">NGO Name *</label>
+                    <input type="text" id="ngoName" name="ngo_name" required>
+                </div>
+                <div class="form-group">
+                    <label for="contactPerson">Contact Person *</label>
+                    <input type="text" id="contactPerson" name="contact_person" required>
+                </div>
+                <div class="form-group">
+                    <label for="ngoEmail">Email *</label>
+                    <input type="email" id="ngoEmail" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="ngoPhone">Phone *</label>
+                    <input type="tel" id="ngoPhone" name="phone" required>
+                </div>
+                <div class="form-group">
+                    <label for="ngoAddress">Address *</label>
+                    <textarea id="ngoAddress" name="address" rows="2" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="regNo">Registration Number *</label>
+                    <input type="text" id="regNo" name="registration_no" required>
+                </div>
+                <button type="submit" class="btn-primary" style="width: 100%;">Register NGO</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- View NGO Details Modal -->
+    <div id="viewNGOModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>NGO Details</h3>
+                <button class="close-btn" onclick="closeModal('viewNGOModal')">&times;</button>
+            </div>
+            <div id="ngoDetailsContent"></div>
+        </div>
+    </div>
+
+    <script>
+        const ngos = [
+            {
+                id: 1,
+                name: 'HelpIndia',
+                contactPerson: 'Rajesh Nair',
+                email: 'info@helpindia.org',
+                phone: '9812345678',
+                address: 'MG Road, Bangalore, Karnataka',
+                regNo: 'REG12345',
+                verified: true,
+                projects: 23,
+                donations: '₹12,50,000'
+            },
+            {
+                id: 2,
+                name: 'Relief Foundation',
+                contactPerson: 'Priya Sharma',
+                email: 'contact@relieffoundation.org',
+                phone: '9876543210',
+                address: 'Connaught Place, Delhi',
+                regNo: 'REG23456',
+                verified: true,
+                projects: 18,
+                donations: '₹8,75,000'
+            },
+            {
+                id: 3,
+                name: 'Care India',
+                contactPerson: 'Amit Kumar',
+                email: 'info@careindia.org',
+                phone: '9823456789',
+                address: 'Marine Drive, Mumbai, Maharashtra',
+                regNo: 'REG34567',
+                verified: true,
+                projects: 31,
+                donations: '₹15,20,000'
+            },
+            {
+                id: 4,
+                name: 'Seva Trust',
+                contactPerson: 'Lakshmi Menon',
+                email: 'contact@sevatrust.org',
+                phone: '9856789012',
+                address: 'Anna Nagar, Chennai, Tamil Nadu',
+                regNo: 'REG45678',
+                verified: false,
+                projects: 0,
+                donations: '₹0'
+            },
+            {
+                id: 5,
+                name: 'Hope Foundation',
+                contactPerson: 'Ravi Verma',
+                email: 'info@hopefoundation.org',
+                phone: '9834567890',
+                address: 'Banjara Hills, Hyderabad, Telangana',
+                regNo: 'REG56789',
+                verified: true,
+                projects: 12,
+                donations: '₹6,45,000'
+            },
+            {
+                id: 6,
+                name: 'Disaster Response Network',
+                contactPerson: 'Sneha Reddy',
+                email: 'contact@drnetwork.org',
+                phone: '9845678901',
+                address: 'Whitefield, Bangalore, Karnataka',
+                regNo: 'REG67890',
+                verified: false,
+                projects: 0,
+                donations: '₹0'
+            }
+        ];
+
+        function displayNGOs(filter = '') {
+            const grid = document.getElementById('ngoGrid');
+            const searchTerm = filter.toLowerCase();
+            
+            const filtered = ngos.filter(ngo => {
+                return ngo.name.toLowerCase().includes(searchTerm) || 
+                       ngo.address.toLowerCase().includes(searchTerm) ||
+                       ngo.contactPerson.toLowerCase().includes(searchTerm);
+            });
+
+            grid.innerHTML = filtered.map(ngo => `
+                <div class="ngo-card">
+                    <div class="${ngo.verified ? 'verified-badge' : 'verified-badge pending-badge'}">
+                        ${ngo.verified ? '✓ Verified' : '⏳ Pending'}
+                    </div>
+                    
+                    <div class="ngo-header">
+                        <div class="ngo-logo">${ngo.name.charAt(0)}</div>
+                        <div class="ngo-info">
+                            <h3>${ngo.name}</h3>
+                            <div class="ngo-reg">Reg: ${ngo.regNo}</div>
+                        </div>
+                    </div>
+
+                    <div class="ngo-details">
+                        <div class="detail-item">
+                            <span class="detail-icon">👤</span>
+                            <span>${ngo.contactPerson}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-icon">📧</span>
+                            <span>${ngo.email}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-icon">📱</span>
+                            <span>${ngo.phone}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-icon">📍</span>
+                            <span>${ngo.address}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-icon">📊</span>
+                            <span>${ngo.projects} Active Projects</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-icon">💰</span>
+                            <span>${ngo.donations} Managed</span>
+                        </div>
+                    </div>
+
+                    <div class="ngo-actions">
+                        ${!ngo.verified ? 
+                            `<button class="btn-action btn-verify" onclick="verifyNGO(${ngo.id})">✓ Verify</button>` : 
+                            `<button class="btn-action btn-view" onclick="viewNGO(${ngo.id})">View Details</button>`
+                        }
+                        <button class="btn-action btn-edit">Edit</button>
+                        ${!ngo.verified ? 
+                            `<button class="btn-action btn-delete" onclick="deleteNGO(${ngo.id})">Delete</button>` : 
+                            `<button class="btn-action btn-view">Contact</button>`
+                        }
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function verifyNGO(id) {
+            const ngo = ngos.find(n => n.id === id);
+            if (ngo && confirm(`Verify ${ngo.name}?`)) {
+                ngo.verified = true;
+                displayNGOs(document.getElementById('searchInput').value);
+                alert(`${ngo.name} has been verified successfully!`);
+            }
+        }
+
+        function viewNGO(id) {
+            const ngo = ngos.find(n => n.id === id);
+            if (ngo) {
+                const content = document.getElementById('ngoDetailsContent');
+                content.innerHTML = `
+                    <div style="text-align: center; margin-bottom: 2rem;">
+                        <div class="ngo-logo" style="margin: 0 auto 1rem;">${ngo.name.charAt(0)}</div>
+                        <h3 style="color: #00bcd4; margin-bottom: 0.5rem;">${ngo.name}</h3>
+                        <div style="color: #b0bec5;">Reg No: ${ngo.regNo}</div>
+                    </div>
+                    
+                    <div style="display: grid; gap: 1rem; color: #b0bec5;">
+                        <div><strong style="color: #00bcd4;">Contact Person:</strong> ${ngo.contactPerson}</div>
+                        <div><strong style="color: #00bcd4;">Email:</strong> ${ngo.email}</div>
+                        <div><strong style="color: #00bcd4;">Phone:</strong> ${ngo.phone}</div>
+                        <div><strong style="color: #00bcd4;">Address:</strong> ${ngo.address}</div>
+                        <div><strong style="color: #00bcd4;">Active Projects:</strong> ${ngo.projects}</div>
+                        <div><strong style="color: #00bcd4;">Total Donations Managed:</strong> ${ngo.donations}</div>
+                        <div><strong style="color: #00bcd4;">Status:</strong> ${ngo.verified ? '✓ Verified' : 'Pending Verification'}</div>
+                    </div>
+                `;
+                openModal('viewNGOModal');
+            }
+        }
+
+        function deleteNGO(id) {
+            const ngo = ngos.find(n => n.id === id);
+            if (ngo && confirm(`Delete ${ngo.name}? This action cannot be undone.`)) {
+                const index = ngos.findIndex(n => n.id === id);
+                ngos.splice(index, 1);
+                displayNGOs(document.getElementById('searchInput').value);
+                alert('NGO deleted successfully!');
+            }
+        }
+
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.add('active');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('input', function() {
+            displayNGOs(this.value);
+        });
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.classList.remove('active');
+            }
+        }
+
+        // Form submission
+        document.getElementById('addNGOForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const newNGO = {
+                id: ngos.length + 1,
+                name: document.getElementById('ngoName').value,
+                contactPerson: document.getElementById('contactPerson').value,
+                email: document.getElementById('ngoEmail').value,
+                phone: document.getElementById('ngoPhone').value,
+                address: document.getElementById('ngoAddress').value,
+                regNo: document.getElementById('regNo').value,
+                verified: false,
+                projects: 0,
+                donations: '₹0'
+            };
+
+            ngos.push(newNGO);
+            displayNGOs();
+            closeModal('addNGOModal');
+            this.reset();
+            alert('NGO registered successfully! Pending verification.');
+        });
+
+        // Validate phone number
+        document.getElementById('ngoPhone').addEventListener('input', function(e) {
+            this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10);
+        });
+
+        // Initialize
+        displayNGOs();
+    </script>
+</body>
+</html>

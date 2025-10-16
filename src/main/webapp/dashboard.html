@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Disaster Relief System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a1828 0%, #1a3a52 100%);
+            color: #ffffff;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background: rgba(10, 24, 40, 0.95);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 20px rgba(0, 188, 212, 0.3);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #00bcd4;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #00bcd4, #0097a7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .logout-btn {
+            padding: 0.5rem 1.5rem;
+            background: transparent;
+            border: 2px solid #00bcd4;
+            color: #00bcd4;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .logout-btn:hover {
+            background: #00bcd4;
+            color: white;
+        }
+
+        .dashboard-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .dashboard-header {
+            margin-bottom: 2rem;
+        }
+
+        .dashboard-header h1 {
+            font-size: 2.5rem;
+            color: #00bcd4;
+            margin-bottom: 0.5rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 2rem;
+            border-radius: 15px;
+            border: 1px solid rgba(0, 188, 212, 0.3);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            border-color: #00bcd4;
+            box-shadow: 0 10px 30px rgba(0, 188, 212, 0.3);
+        }
+
+        .stat-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #00bcd4;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: #b0bec5;
+            font-size: 1rem;
+        }
+
+        .action-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 3rem;
+        }
+
+        .action-btn {
+            padding: 1.5rem;
+            background: linear-gradient(135deg, rgba(0, 188, 212, 0.1), rgba(0, 151, 167, 0.1));
+            border: 1px solid rgba(0, 188, 212, 0.3);
+            border-radius: 15px;
+            color: white;
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .action-btn:hover {
+            background: linear-gradient(135deg, rgba(0, 188, 212, 0.2), rgba(0, 151, 167, 0.2));
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(0, 188, 212, 0.3);
+        }
+
+        .action-btn-icon {
+            font-size: 2rem;
+        }
+
+        .section {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 2rem;
+            border-radius: 15px;
+            border: 1px solid rgba(0, 188, 212, 0.3);
+            margin-bottom: 2rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-header h2 {
+            color: #00bcd4;
+            font-size: 1.8rem;
+        }
+
+        .btn-primary {
+            padding: 0.7rem 1.5rem;
+            background: linear-gradient(135deg, #00bcd4, #0097a7);
+            border: none;
+            border-radius: 25px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 188, 212, 0.5);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: rgba(0, 188, 212, 0.1);
+        }
+
+        th {
+            padding: 1rem;
+            text-align: left;
+            color: #00bcd4;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid rgba(0, 188, 212, 0.1);
+        }
+
+        tr:hover {
+            background: rgba(0, 188, 212, 0.05);
+        }
+
+        .status-badge {
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .status-active {
+            background: rgba(76, 175, 80, 0.2);
+            color: #4caf50;
+        }
+
+        .status-pending {
+            background: rgba(255, 193, 7, 0.2);
+            color: #ffc107;
+        }
+
+        .status-resolved {
+            background: rgba(33, 150, 243, 0.2);
+            color: #2196f3;
+        }
+
+        .status-critical {
+            background: rgba(244, 67, 54, 0.2);
+            color: #f44336;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: #0a1828;
+            padding: 2rem;
+            border-radius: 15px;
+            border: 1px solid rgba(0, 188, 212, 0.3);
+            max-width: 500px;
+            width: 90%;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-header h3 {
+            color: #00bcd4;
+            font-size: 1.5rem;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: #00bcd4;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #00bcd4;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid rgba(0, 188, 212, 0.3);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+            font-family: inherit;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #00bcd4;
+        }
+
+        @media (max-width: 768px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .action-buttons {
+                grid-template-columns: 1fr;
+            }
+
+            table {
+                font-size: 0.9rem;
+            }
+
+            th, td {
+                padding: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">🛡️ Admin Dashboard</div>
+        <div class="nav-right">
+            <div class="user-info">
+                <div class="user-avatar">A</div>
+                <span id="userName">Admin</span>
+            </div>
+            <a href="index.html" class="logout-btn">Logout</a>
+        </div>
+    </nav>
+
+    <div class="dashboard-container">
+        <div class="dashboard-header">
+            <h1>Welcome, Admin</h1>
+            <p style="color: #b0bec5;">Manage and monitor disaster relief operations</p>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon">🆘</div>
+                <div class="stat-value" id="activeDisasters">12</div>
+                <div class="stat-label">Active Disasters</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">📋</div>
+                <div class="stat-value" id="helpRequests">47</div>
+                <div class="stat-label">Help Requests</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">👥</div>
+                <div class="stat-value" id="volunteers">156</div>
+                <div class="stat-label">Active Volunteers</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">📦</div>
+                <div class="stat-value" id="resources">2,847</div>
+                <div class="stat-label">Resources Available</div>
+            </div>
+        </div>
+
+        <div class="action-buttons">
+            <button class="action-btn" onclick="openModal('disasterModal')">
+                <span class="action-btn-icon">➕</span>
+                <span>Add Disaster</span>
+            </button>
+            <button class="action-btn" onclick="location.href='resources.html'">
+                <span class="action-btn-icon">📦</span>
+                <span>Manage Resources</span>
+            </button>
+            <button class="action-btn" onclick="location.href='ngo_management.html'">
+                <span class="action-btn-icon">🏢</span>
+                <span>Manage NGOs</span>
+            </button>
+            <button class="action-btn" onclick="location.href='user_management.html'">
+                <span class="action-btn-icon">👤</span>
+                <span>Manage Users</span>
+            </button>
+        </div>
+
+        <div class="section">
+            <div class="section-header">
+                <h2>Recent Disasters</h2>
+            </div>
+            <table id="disastersTable">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Type</th>
+                        <th>Location</th>
+                        <th>Date</th>
+                        <th>Severity</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Flood in Kerala</td>
+                        <td>Flood</td>
+                        <td>Kerala</td>
+                        <td>2025-09-01</td>
+                        <td><span class="status-badge status-critical">High</span></td>
+                        <td><span class="status-badge status-active">Active</span></td>
+                    </tr>
+                    <tr>
+                        <td>Earthquake Mumbai</td>
+                        <td>Earthquake</td>
+                        <td>Mumbai, Maharashtra</td>
+                        <td>2025-10-10</td>
+                        <td><span class="status-badge status-pending">Medium</span></td>
+                        <td><span class="status-badge status-active">Active</span></td>
+                    </tr>
+                    <tr>
+                        <td>Cyclone Orissa</td>
+                        <td>Cyclone</td>
+                        <td>Odisha</td>
+                        <td>2025-09-15</td>
+                        <td><span class="status-badge status-critical">Critical</span></td>
+                        <td><span class="status-badge status-resolved">Resolved</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="section">
+            <div class="section-header">
+                <h2>Pending Help Requests</h2>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Request ID</th>
+                        <th>User</th>
+                        <th>Location</th>
+                        <th>Help Type</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>#1001</td>
+                        <td>Amit Verma</td>
+                        <td>Kottayam</td>
+                        <td>Medical Aid</td>
+                        <td>2025-10-14</td>
+                        <td><span class="status-badge status-pending">Pending</span></td>
+                    </tr>
+                    <tr>
+                        <td>#1002</td>
+                        <td>Priya Singh</td>
+                        <td>Thrissur</td>
+                        <td>Food & Water</td>
+                        <td>2025-10-15</td>
+                        <td><span class="status-badge status-pending">Pending</span></td>
+                    </tr>
+                    <tr>
+                        <td>#1003</td>
+                        <td>Raj Kumar</td>
+                        <td>Kochi</td>
+                        <td>Shelter</td>
+                        <td>2025-10-16</td>
+                        <td><span class="status-badge status-pending">Pending</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Add Disaster Modal -->
+    <div id="disasterModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add New Disaster</h3>
+                <button class="close-btn" onclick="closeModal('disasterModal')">&times;</button>
+            </div>
+            <form action="AddDisasterServlet" method="POST" id="disasterForm">
+                <div class="form-group">
+                    <label for="disasterName">Disaster Name *</label>
+                    <input type="text" id="disasterName" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="disasterType">Type *</label>
+                    <select id="disasterType" name="type" required>
+                        <option value="Flood">Flood</option>
+                        <option value="Earthquake">Earthquake</option>
+                        <option value="Cyclone">Cyclone</option>
+                        <option value="Fire">Fire</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="disasterLocation">Location *</label>
+                    <input type="text" id="disasterLocation" name="location" required>
+                </div>
+                <div class="form-group">
+                    <label for="disasterDate">Date *</label>
+                    <input type="date" id="disasterDate" name="date" required>
+                </div>
+                <div class="form-group">
+                    <label for="disasterSeverity">Severity *</label>
+                    <select id="disasterSeverity" name="severity" required>
+                        <option value="Low">Low</option>
+                        <option value="Medium">Medium</option>
+                        <option value="High">High</option>
+                        <option value="Critical">Critical</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="disasterDescription">Description</label>
+                    <textarea id="disasterDescription" name="description" rows="3"></textarea>
+                </div>
+                <button type="submit" class="btn-primary" style="width: 100%;">Add Disaster</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.add('active');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.classList.remove('active');
+            }
+        }
+
+        // Set today's date as max for disaster date
+        document.getElementById('disasterDate').max = new Date().toISOString().split('T')[0];
+
+        // Load user name from session
+        window.onload = function() {
+            // In a real application, this would come from session
+            const userName = sessionStorage.getItem('full_name') || 'Admin';
+            document.getElementById('userName').textContent = userName;
+        }
+    </script>
+</body>
+</html>

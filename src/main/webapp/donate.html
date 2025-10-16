@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donate - Disaster Relief System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a1828 0%, #1a3a52 100%);
+            color: #ffffff;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background: rgba(10, 24, 40, 0.95);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 20px rgba(0, 188, 212, 0.3);
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #00bcd4;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #ffffff;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #00bcd4;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .hero-section {
+            text-align: center;
+            padding: 3rem 0;
+            margin-bottom: 3rem;
+        }
+
+        .hero-section h1 {
+            font-size: 3rem;
+            color: #00bcd4;
+            margin-bottom: 1rem;
+        }
+
+        .hero-section p {
+            font-size: 1.2rem;
+            color: #b0bec5;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .impact-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-box {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 2rem;
+            border-radius: 15px;
+            border: 1px solid rgba(0, 188, 212, 0.3);
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .stat-box:hover {
+            transform: translateY(-5px);
+            border-color: #00bcd4;
+            box-shadow: 0 10px 30px rgba(0, 188, 212, 0.3);
+        }
+
+        .stat-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #00bcd4;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: #b0bec5;
+        }
+
+        .donation-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .donation-form {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 2.5rem;
+            border-radius: 20px;
+            border: 1px solid rgba(0, 188, 212, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .section-title {
+            font-size: 2rem;
+            color: #00bcd4;
+            margin-bottom: 1.5rem;
+        }
+
+        .donation-types {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .donation-type-btn {
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(0, 188, 212, 0.3);
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            color: white;
+        }
+
+        .donation-type-btn:hover {
+            border-color: #00bcd4;
+            background: rgba(0, 188, 212, 0.1);
+        }
+
+        .donation-type-btn.active {
+            background: linear-gradient(135deg, rgba(0, 188, 212, 0.3), rgba(0, 151, 167, 0.3));
+            border-color: #00bcd4;
+        }
+
+        .donation-type-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .amount-presets {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .amount-btn {
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(0, 188, 212, 0.3);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .amount-btn:hover {
+            border-color: #00bcd4;
+            background: rgba(0, 188, 212, 0.1);
+        }
+
+        .amount-btn.active {
+            background: linear-gradient(135deg, #00bcd4, #0097a7);
+            border-color: #00bcd4;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #00bcd4;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 1px solid rgba(0, 188, 212, 0.3);
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            color: #ffffff;
+            font-size: 1rem;
+            transition: all 0.3s;
+            font-family: inherit;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #00bcd4;
+            box-shadow: 0 0 15px rgba(0, 188, 212, 0.3);
+        }
+
+        .form-group select option {
+            background: #0a1828;
+        }
+
+        .currency-input {
+            position: relative;
+        }
+
+        .currency-input::before {
+            content: '₹';
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #00bcd4;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .currency-input input {
+            padding-left: 2.5rem;
+        }
+
+        .btn-donate {
+            width: 100%;
+            padding: 1.2rem;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+            background: linear-gradient(135deg, #00bcd4, #0097a7);
+            color: white;
+            box-shadow: 0 4px 15px rgba(0, 188, 212, 0.4);
+        }
+
+        .btn-donate:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(0, 188, 212, 0.6);
+        }
+
+        .recent-donations {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 2.5rem;
+            border-radius: 20px;
+            border: 1px solid rgba(0, 188, 212, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .donation-list {
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .donation-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1.5rem;
+            border-radius: 10px;
+            border: 1px solid rgba(0, 188, 212, 0.2);
+            margin-bottom: 1rem;
+            transition: all 0.3s;
+        }
+
+        .donation-item:hover {
+            border-color: #00bcd4;
+            transform: translateX(5px);
+        }
+
+        .donor-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .donor-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #00bcd4, #0097a7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .donor-details {
+            flex: 1;
+        }
+
+        .donor-name {
+            font-weight: 600;
+            color: #00bcd4;
+            margin-bottom: 0.2rem;
+        }
+
+        .donation-time {
+            font-size: 0.85rem;
+            color: #b0bec5;
+        }
+
+        .donation-amount {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #00bcd4;
+        }
+
+        .donation-cause {
+            color: #b0bec5;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        .trust-badges {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(0, 188, 212, 0.2);
+        }
+
+        .trust-badge {
+            text-align: center;
+            color: #b0bec5;
+        }
+
+        .trust-badge-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        @media (max-width: 968px) {
+            .donation-section {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-section h1 {
+                font-size: 2rem;
+            }
+
+            .amount-presets {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">💰 Donate</div>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="login.html">Login</a></li>
+            <li><a href="register.html">Register</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <div class="hero-section">
+            <h1>Make a Difference Today</h1>
+            <p>Your contribution helps provide essential relief to disaster-affected communities. Every donation counts and reaches those who need it most.</p>
+        </div>
+
+        <div class="impact-stats">
+            <div class="stat-box">
+                <div class="stat-icon">💰</div>
+                <div class="stat-value">₹25L+</div>
+                <div class="stat-label">Total Donations</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-icon">🤝</div>
+                <div class="stat-value">1,247</div>
+                <div class="stat-label">Lives Impacted</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-icon">👥</div>
+                <div class="stat-value">850+</div>
+                <div class="stat-label">Donors</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-icon">🎯</div>
+                <div class="stat-value">100%</div>
+                <div class="stat-label">Transparency</div>
+            </div>
+        </div>
+
+        <div class="donation-section">
+            <div class="donation-form">
+                <h2 class="section-title">Make Your Donation</h2>
+
+                <form action="DonateServlet" method="POST" id="donationForm">
+                    <div class="donation-types">
+                        <div class="donation-type-btn active" onclick="selectDonationType(this, 'Money')">
+                            <div class="donation-type-icon">💵</div>
+                            <div>Money</div>
+                        </div>
+                        <div class="donation-type-btn" onclick="selectDonationType(this, 'Material')">
+                            <div class="donation-type-icon">📦</div>
+                            <div>Material</div>
+                        </div>
+                    </div>
+                    <input type="hidden" id="donationType" name="donation_type" value="Money">
+
+                    <div id="moneySection">
+                        <label style="color: #00bcd4; margin-bottom: 1rem; display: block;">Select Amount</label>
+                        <div class="amount-presets">
+                            <div class="amount-btn" onclick="selectAmount(this, 500)">₹500</div>
+                            <div class="amount-btn" onclick="selectAmount(this, 1000)">₹1,000</div>
+                            <div class="amount-btn" onclick="selectAmount(this, 2000)">₹2,000</div>
+                            <div class="amount-btn" onclick="selectAmount(this, 5000)">₹5,000</div>
+                            <div class="amount-btn" onclick="selectAmount(this, 10000)">₹10,000</div>
+                            <div class="amount-btn active" onclick="selectAmount(this, 0)">Custom</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="amount">Donation Amount *</label>
+                            <div class="currency-input">
+                                <input type="number" id="amount" name="amount" placeholder="Enter amount" min="1" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="materialSection" style="display: none;">
+                        <div class="form-group">
+                            <label for="materialDescription">Material Description *</label>
+                            <textarea id="materialDescription" name="description" rows="3" placeholder="Describe what you're donating (e.g., 100 blankets, 50 food packets)"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="donorType">Donor Type *</label>
+                        <select id="donorType" name="donor_type" required>
+                            <option value="User">Individual</option>
+                            <option value="NGO">NGO/Organization</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="purpose">Purpose (Optional)</label>
+                        <textarea id="purpose" name="description" rows="2" placeholder="Specify how you'd like your donation to be used"></textarea>
+                    </div>
+
+                    <button type="submit" class="btn-donate">Donate Now</button>
+                </form>
+
+                <div class="trust-badges">
+                    <div class="trust-badge">
+                        <div class="trust-badge-icon">🔒</div>
+                        <div>Secure Payment</div>
+                    </div>
+                    <div class="trust-badge">
+                        <div class="trust-badge-icon">✅</div>
+                        <div>Verified NGOs</div>
+                    </div>
+                    <div class="trust-badge">
+                        <div class="trust-badge-icon">📊</div>
+                        <div>Full Transparency</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="recent-donations">
+                <h2 class="section-title">Recent Donations</h2>
+                <div class="donation-list">
+                    <div class="donation-item">
+                        <div class="donor-info">
+                            <div class="donor-avatar">A</div>
+                            <div class="donor-details">
+                                <div class="donor-name">Anonymous Donor</div>
+                                <div class="donation-time">2 hours ago</div>
+                            </div>
+                            <div class="donation-amount">₹10,000</div>
+                        </div>
+                        <div class="donation-cause">For Kerala Flood Relief</div>
+                    </div>
+
+                    <div class="donation-item">
+                        <div class="donor-info">
+                            <div class="donor-avatar">H</div>
+                            <div class="donor-details">
+                                <div class="donor-name">HelpIndia NGO</div>
+                                <div class="donation-time">5 hours ago</div>
+                            </div>
+                            <div class="donation-amount">₹50,000</div>
+                        </div>
+                        <div class="donation-cause">General Relief Fund</div>
+                    </div>
+
+                    <div class="donation-item">
+                        <div class="donor-info">
+                            <div class="donor-avatar">R</div>
+                            <div class="donor-details">
+                                <div class="donor-name">Raj Kumar</div>
+                                <div class="donation-time">1 day ago</div>
+                            </div>
+                            <div class="donation-amount">₹5,000</div>
+                        </div>
+                        <div class="donation-cause">Medical Supplies</div>
+                    </div>
+
+                    <div class="donation-item">
+                        <div class="donor-info">
+                            <div class="donor-avatar">P</div>
+                            <div class="donor-details">
+                                <div class="donor-name">Priya Singh</div>
+                                <div class="donation-time">1 day ago</div>
+                            </div>
+                            <div class="donation-amount">₹2,000</div>
+                        </div>
+                        <div class="donation-cause">Food Supplies</div>
+                    </div>
+
+                    <div class="donation-item">
+                        <div class="donor-info">
+                            <div class="donor-avatar">C</div>
+                            <div class="donor-details">
+                                <div class="donor-name">Care Foundation</div>
+                                <div class="donation-time">2 days ago</div>
+                            </div>
+                            <div class="donation-amount">Material</div>
+                        </div>
+                        <div class="donation-cause">200 Blankets and Clothes</div>
+                    </div>
+
+                    <div class="donation-item">
+                        <div class="donor-info">
+                            <div class="donor-avatar">A</div>
+                            <div class="donor-details">
+                                <div class="donor-name">Amit Verma</div>
+                                <div class="donation-time">2 days ago</div>
+                            </div>
+                            <div class="donation-amount">₹3,500</div>
+                        </div>
+                        <div class="donation-cause">Shelter Support</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function selectDonationType(element, type) {
+            document.querySelectorAll('.donation-type-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            element.classList.add('active');
+            document.getElementById('donationType').value = type;
+
+            // Show/hide relevant sections
+            if (type === 'Money') {
+                document.getElementById('moneySection').style.display = 'block';
+                document.getElementById('materialSection').style.display = 'none';
+                document.getElementById('amount').required = true;
+                document.getElementById('materialDescription').required = false;
+            } else {
+                document.getElementById('moneySection').style.display = 'none';
+                document.getElementById('materialSection').style.display = 'block';
+                document.getElementById('amount').required = false;
+                document.getElementById('materialDescription').required = true;
+            }
+        }
+
+        function selectAmount(element, amount) {
+            document.querySelectorAll('.amount-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            element.classList.add('active');
+            
+            if (amount > 0) {
+                document.getElementById('amount').value = amount;
+            } else {
+                document.getElementById('amount').value = '';
+                document.getElementById('amount').focus();
+            }
+        }
+
+        // Form validation
+        document.getElementById('donationForm').addEventListener('submit', function(e) {
+            const donationType = document.getElementById('donationType').value;
+            
+            if (donationType === 'Money') {
+                const amount = parseFloat(document.getElementById('amount').value);
+                if (!amount || amount < 1) {
+                    e.preventDefault();
+                    alert('Please enter a valid donation amount');
+                    return;
+                }
+            } else {
+                const description = document.getElementById('materialDescription').value.trim();
+                if (!description) {
+                    e.preventDefault();
+                    alert('Please describe what materials you are donating');
+                    return;
+                }
+            }
+        });
+    </script>
+</body>
+</html>

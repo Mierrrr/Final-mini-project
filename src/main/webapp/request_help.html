@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Request Help - Disaster Relief System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a1828 0%, #1a3a52 100%);
+            color: #ffffff;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background: rgba(10, 24, 40, 0.95);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 20px rgba(0, 188, 212, 0.3);
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #00bcd4;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #ffffff;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #00bcd4;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .page-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .help-form-section {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 2rem;
+            border-radius: 20px;
+            border: 1px solid rgba(0, 188, 212, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .section-header {
+            margin-bottom: 2rem;
+        }
+
+        .section-header h2 {
+            font-size: 2rem;
+            color: #00bcd4;
+            margin-bottom: 0.5rem;
+        }
+
+        .section-header p {
+            color: #b0bec5;
+        }
+
+        .emergency-banner {
+            background: linear-gradient(135deg, rgba(244, 67, 54, 0.2), rgba(211, 47, 47, 0.2));
+            border: 1px solid #f44336;
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .emergency-icon {
+            font-size: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #00bcd4;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 1px solid rgba(0, 188, 212, 0.3);
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            color: #ffffff;
+            font-size: 1rem;
+            transition: all 0.3s;
+            font-family: inherit;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #00bcd4;
+            box-shadow: 0 0 15px rgba(0, 188, 212, 0.3);
+        }
+
+        .form-group select option {
+            background: #0a1828;
+        }
+
+        .help-types {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.5rem;
+        }
+
+        .help-type-option {
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(0, 188, 212, 0.3);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .help-type-option:hover {
+            border-color: #00bcd4;
+            background: rgba(0, 188, 212, 0.1);
+        }
+
+        .help-type-option.selected {
+            background: linear-gradient(135deg, rgba(0, 188, 212, 0.3), rgba(0, 151, 167, 0.3));
+            border-color: #00bcd4;
+        }
+
+        .help-type-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 1rem;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+            background: linear-gradient(135deg, #00bcd4, #0097a7);
+            color: white;
+            box-shadow: 0 4px 15px rgba(0, 188, 212, 0.4);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(0, 188, 212, 0.6);
+        }
+
+        .my-requests-section {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 2rem;
+            border-radius: 20px;
+            border: 1px solid rgba(0, 188, 212, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .request-list {
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        .request-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1.5rem;
+            border-radius: 10px;
+            border: 1px solid rgba(0, 188, 212, 0.2);
+            margin-bottom: 1rem;
+            transition: all 0.3s;
+        }
+
+        .request-card:hover {
+            border-color: #00bcd4;
+            transform: translateX(5px);
+        }
+
+        .request-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .request-id {
+            color: #00bcd4;
+            font-weight: 600;
+        }
+
+        .status-badge {
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .status-pending {
+            background: rgba(255, 193, 7, 0.2);
+            color: #ffc107;
+        }
+
+        .status-progress {
+            background: rgba(33, 150, 243, 0.2);
+            color: #2196f3;
+        }
+
+        .status-resolved {
+            background: rgba(76, 175, 80, 0.2);
+            color: #4caf50;
+        }
+
+        .request-details {
+            color: #b0bec5;
+            line-height: 1.6;
+        }
+
+        .request-detail-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+
+        .info-cards {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .info-card {
+            background: rgba(0, 188, 212, 0.1);
+            padding: 1.5rem;
+            border-radius: 10px;
+            border: 1px solid rgba(0, 188, 212, 0.3);
+            text-align: center;
+        }
+
+        .info-card-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .info-card-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #00bcd4;
+        }
+
+        .info-card-label {
+            color: #b0bec5;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 968px) {
+            .page-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .help-types {
+                grid-template-columns: 1fr;
+            }
+
+            .info-cards {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">🆘 Request Help</div>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="dashboard.html">Dashboard</a></li>
+            <li><a href="index.html">Logout</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <div class="page-layout">
+            <!-- Help Request Form -->
+            <div class="help-form-section">
+                <div class="section-header">
+                    <h2>Request Emergency Help</h2>
+                    <p>Fill in the details and we'll connect you with help</p>
+                </div>
+
+                <div class="emergency-banner">
+                    <div class="emergency-icon">⚠️</div>
+                    <div>
+                        <strong>Emergency Hotline: 1800-XXX-XXXX</strong><br>
+                        <small>Available 24/7 for immediate assistance</small>
+                    </div>
+                </div>
+
+                <form action="RequestHelpServlet" method="POST" id="helpRequestForm">
+                    <div class="form-group">
+                        <label for="disaster">Related Disaster</label>
+                        <select id="disaster" name="disaster_id">
+                            <option value="">General Request</option>
+                            <option value="1">Flood in Kerala</option>
+                            <option value="2">Earthquake Mumbai</option>
+                            <option value="3">Cyclone Orissa</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="location">Your Location *</label>
+                        <input type="text" id="location" name="location" placeholder="Enter your current location" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Type of Help Needed *</label>
+                        <div class="help-types">
+                            <div class="help-type-option" onclick="selectHelpType(this, 'Medical Aid')">
+                                <div class="help-type-icon">🏥</div>
+                                <div>Medical Aid</div>
+                            </div>
+                            <div class="help-type-option" onclick="selectHelpType(this, 'Food & Water')">
+                                <div class="help-type-icon">🍽️</div>
+                                <div>Food & Water</div>
+                            </div>
+                            <div class="help-type-option" onclick="selectHelpType(this, 'Shelter')">
+                                <div class="help-type-icon">🏠</div>
+                                <div>Shelter</div>
+                            </div>
+                            <div class="help-type-option" onclick="selectHelpType(this, 'Rescue')">
+                                <div class="help-type-icon">🚁</div>
+                                <div>Rescue</div>
+                            </div>
+                            <div class="help-type-option" onclick="selectHelpType(this, 'Clothing')">
+                                <div class="help-type-icon">👕</div>
+                                <div>Clothing</div>
+                            </div>
+                            <div class="help-type-option" onclick="selectHelpType(this, 'Other')">
+                                <div class="help-type-icon">📦</div>
+                                <div>Other</div>
+                            </div>
+                        </div>
+                        <input type="hidden" id="helpType" name="help_type" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="description">Additional Details *</label>
+                        <textarea id="description" name="description" rows="4" placeholder="Describe your situation and what kind of help you need..." required></textarea>
+                    </div>
+
+                    <button type="submit" class="btn">Submit Help Request</button>
+                </form>
+            </div>
+
+            <!-- My Requests Section -->
+            <div class="my-requests-section">
+                <div class="section-header">
+                    <h2>My Help Requests</h2>
+                    <p>Track your submitted requests</p>
+                </div>
+
+                <div class="info-cards">
+                    <div class="info-card">
+                        <div class="info-card-icon">📋</div>
+                        <div class="info-card-value">3</div>
+                        <div class="info-card-label">Total Requests</div>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-card-icon">⏳</div>
+                        <div class="info-card-value">1</div>
+                        <div class="info-card-label">Pending</div>
+                    </div>
+                </div>
+
+                <div class="request-list">
+                    <div class="request-card">
+                        <div class="request-header">
+                            <span class="request-id">#1001</span>
+                            <span class="status-badge status-progress">In Progress</span>
+                        </div>
+                        <div class="request-details">
+                            <div class="request-detail-item">
+                                <span><strong>Help Type:</strong></span>
+                                <span>Medical Aid</span>
+                            </div>
+                            <div class="request-detail-item">
+                                <span><strong>Location:</strong></span>
+                                <span>Kottayam</span>
+                            </div>
+                            <div class="request-detail-item">
+                                <span><strong>Date:</strong></span>
+                                <span>Oct 14, 2025</span>
+                            </div>
+                            <div style="margin-top: 0.5rem;">
+                                <strong>Details:</strong> Injured and need medicine
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="request-card">
+                        <div class="request-header">
+                            <span class="request-id">#0987</span>
+                            <span class="status-badge status-resolved">Resolved</span>
+                        </div>
+                        <div class="request-details">
+                            <div class="request-detail-item">
+                                <span><strong>Help Type:</strong></span>
+                                <span>Food & Water</span>
+                            </div>
+                            <div class="request-detail-item">
+                                <span><strong>Location:</strong></span>
+                                <span>Kochi</span>
+                            </div>
+                            <div class="request-detail-item">
+                                <span><strong>Date:</strong></span>
+                                <span>Oct 10, 2025</span>
+                            </div>
+                            <div style="margin-top: 0.5rem;">
+                                <strong>Details:</strong> Need food supplies for family of 5
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="request-card">
+                        <div class="request-header">
+                            <span class="request-id">#0856</span>
+                            <span class="status-badge status-resolved">Resolved</span>
+                        </div>
+                        <div class="request-details">
+                            <div class="request-detail-item">
+                                <span><strong>Help Type:</strong></span>
+                                <span>Shelter</span>
+                            </div>
+                            <div class="request-detail-item">
+                                <span><strong>Location:</strong></span>
+                                <span>Thrissur</span>
+                            </div>
+                            <div class="request-detail-item">
+                                <span><strong>Date:</strong></span>
+                                <span>Sep 25, 2025</span>
+                            </div>
+                            <div style="margin-top: 0.5rem;">
+                                <strong>Details:</strong> House damaged, need temporary shelter
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function selectHelpType(element, type) {
+            // Remove selected class from all options
+            document.querySelectorAll('.help-type-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            
+            // Add selected class to clicked option
+            element.classList.add('selected');
+            
+            // Set hidden input value
+            document.getElementById('helpType').value = type;
+        }
+
+        // Form validation
+        document.getElementById('helpRequestForm').addEventListener('submit', function(e) {
+            const location = document.getElementById('location').value.trim();
+            const helpType = document.getElementById('helpType').value;
+            const description = document.getElementById('description').value.trim();
+
+            if (!location || !helpType || !description) {
+                e.preventDefault();
+                alert('Please fill in all required fields');
+                return;
+            }
+
+            if (description.length < 10) {
+                e.preventDefault();
+                alert('Please provide more details about your situation (at least 10 characters)');
+                return;
+            }
+        });
+    </script>
+</body>
+</html>
